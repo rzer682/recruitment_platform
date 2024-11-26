@@ -4,9 +4,16 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class User(models.Model):
+    username = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    password = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.username
 
 class Candidat(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
@@ -14,6 +21,7 @@ class Candidat(models.Model):
     experience = models.TextField(blank=True)
     competences = models.TextField(blank=True, null=True)  
     cv = models.FileField(upload_to='cv/', blank=True, null=True)
+    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True) 
     
     
@@ -59,8 +67,8 @@ class OffreEmploie(models.Model):
     
 
 class Candidature(models.Model):
-    offre = models.ForeignKey(OffreEmploie, on_delete=models.CASCADE)
-    candidat = models.ForeignKey(Candidat, on_delete=models.CASCADE)
+    offre = models.ForeignKey('OffreEmploie', on_delete=models.CASCADE, related_name='candidatures')
+    candidat = models.ForeignKey(Candidat, on_delete=models.CASCADE, related_query_name='candidatures')
     date_candidature = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
@@ -72,9 +80,8 @@ class Candidature(models.Model):
         ],
         default='en_attente'
     )
-
-    lettre_motivation = models.FileField(upload_to='lettre_motivation/', null=True, blank=True)
+    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
     
 
     def __str__(self):
-        return f"{self.candidat} - {self.offre}"
+        return f"{self.candidat.nom} - {self.offre.titre}"

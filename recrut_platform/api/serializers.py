@@ -1,6 +1,11 @@
 from rest_framework import serializers
-from .models import Candidat, Recruteur, OffreEmploie, Entreprise
+from .models import Candidat, Recruteur, OffreEmploie, Entreprise, Candidature, User 
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 class CandidatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidat
@@ -20,4 +25,9 @@ class OffreEmploieSerializer(serializers.ModelSerializer):
 class EntrepriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Entreprise
+        fields = '__all__'
+
+class CandidatureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Candidature
         fields = '__all__'
