@@ -76,7 +76,16 @@ WSGI_APPLICATION = 'recrut_platform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'recruitment_db',
+        'USER': 'postgres',
+        'PASSWORD': 'Poplive12',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
 
 
 # Password validation
