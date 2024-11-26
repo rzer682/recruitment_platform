@@ -5,7 +5,16 @@ from .models import Candidat, Recruteur, OffreEmploie, Entreprise, Candidature, 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'email', 'first_name', 'last_name', 'password', 'role']
+        
+    def create(self, validated_data):
+        role = validated_data.get('role')
+        user = User.objects.create(**validated_data)
+        if role == 'candidat':
+            Candidat.objects.create(user=user)
+        elif role == 'recruteur':
+            Recruteur.objects.create(user=user)
+        return user
 class CandidatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Candidat

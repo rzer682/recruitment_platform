@@ -1,33 +1,32 @@
 from django.db import models
-from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 
 # Create your models here.
 
-class User(models.Model):
-    username = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=100)
+class User(AbstractUser):
+    ROLES = (
+        ('recruteur', 'Recruteur'),
+        ('candidat', 'Candidat'),
+    )
+    role = models.CharField(max_length=20, choices=ROLES, default='candidat')
 
     def __str__(self):
         return self.username
 
-class Candidat(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    telephone = models.CharField(max_length=15, blank=True)
-    experience = models.TextField(blank=True)
-    competences = models.TextField(blank=True, null=True)  
-    cv = models.FileField(upload_to='cv/', blank=True, null=True)
-    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
-    linkedin = models.URLField(blank=True, null=True) 
-    
     
 
+class Candidat(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
+    telephone = models.CharField(max_length=15, blank=True)
+    experience = models.TextField(blank=True)
+    competences = models.TextField(blank=True, null=True)
+    cv = models.FileField(upload_to='cv/', blank=True, null=True)
+    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
+    linkedin = models.URLField(blank=True, null=True)
+
     def __str__(self):
-        return f"{self.nom} {self.prenom}"
+        return f"{self.user.first_name} {self.user.last_name}"
     
 
 class Entreprise(models.Model):
@@ -42,13 +41,12 @@ class Entreprise(models.Model):
         return self.nom
     
 class Recruteur(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
+    entreprise = models.ForeignKey('Entreprise', on_delete=models.CASCADE)
     poste = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
 
     def __str__(self):
-        return f"{self.user} - {self.entreprise}"
+        return f"{self.user.username} - {self.entreprise.nom}"
     
 
 class OffreEmploie(models.Model): 
@@ -84,4 +82,7 @@ class Candidature(models.Model):
     
 
     def __str__(self):
-        return f"{self.candidat.nom} - {self.offre.titre}"
+        # Vérification si l'utilisateur associé au candidat existe
+        if self.candidat.user:
+            return f"{self.candidat.user.first_name} {self.candidat.user.last_name} - {self.offre.titre}"
+        return f"Candidature sans utilisateur associé - {self.offre.titre}"
