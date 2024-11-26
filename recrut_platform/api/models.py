@@ -13,8 +13,8 @@ class Candidat(models.Model):
     email = models.EmailField(unique=True)
     telephone = models.CharField(max_length=15, blank=True)
     experience = models.TextField(blank=True)
-    competences = models.TextField(blank=True)
-    cv = models.FileField(upload_to='cv/', blank=True, null=True)
+    
+    
 
     def __str__(self):
         return f"{self.nom} {self.prenom}"
