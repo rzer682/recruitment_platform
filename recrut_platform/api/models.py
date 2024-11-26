@@ -7,13 +7,12 @@ from django.contrib.auth.models import User
 
 
 class Candidat(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     telephone = models.CharField(max_length=15, blank=True)
     experience = models.TextField(blank=True)
-    competences = models.JSONField(blank=True, null=True)  
+    competences = models.TextField(blank=True, null=True)  
     cv = models.FileField(upload_to='cv/', blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True) 
     
@@ -35,13 +34,13 @@ class Entreprise(models.Model):
         return self.nom
     
 class Recruteur(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     entreprise = models.ForeignKey(Entreprise, on_delete=models.CASCADE)
     poste = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.entreprise}"
+        return f"{self.user} - {self.entreprise}"
     
 
 class OffreEmploie(models.Model): 
