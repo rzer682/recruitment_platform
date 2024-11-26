@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Candidat, Recruteur
-from .serializers import CandidatSerializer, RecruteurSerializer
+from .models import Candidat, Recruteur, OffreEmploie
+from .serializers import CandidatSerializer, RecruteurSerializer, OffreEmploieSerializer
 
 
 class CandidatViewSet(viewsets.ModelViewSet):
@@ -11,3 +11,10 @@ class CandidatViewSet(viewsets.ModelViewSet):
 class RecruteurViewSet(viewsets.ModelViewSet):
     queryset = Recruteur.objects.all()
     serializer_class = RecruteurSerializer
+
+class OffreEmploieViewSet(viewsets.ModelViewSet):
+    queryset = OffreEmploie.objects.all()
+    serializer_class = OffreEmploieSerializer
+
+    def get_queryset(self):
+        return self.queryset

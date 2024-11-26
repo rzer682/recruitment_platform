@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Candidat, Recruteur
+from .models import Candidat, Recruteur, OffreEmploie
 
 class CandidatSerializer(serializers.ModelSerializer):
     class Meta:
@@ -9,4 +9,10 @@ class CandidatSerializer(serializers.ModelSerializer):
 class RecruteurSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recruteur
+        fields = '__all__'
+
+
+class OffreEmploieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OffreEmploie
         fields = '__all__'
