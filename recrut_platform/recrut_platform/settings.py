@@ -84,8 +84,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'recruitment_db',
-        'USER': 'postgres',
-        'PASSWORD': 'Poplive12',
+        'USER': '*********',
+        'PASSWORD': '*********',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -146,6 +146,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        
     ]
 }
 
