@@ -80,9 +80,5 @@ class Candidature(models.Model):
     )
     lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
     
-
     def __str__(self):
-        # Vérification si l'utilisateur associé au candidat existe
-        if self.candidat.user:
-            return f"{self.candidat.user.first_name} {self.candidat.user.last_name} - {self.offre.titre}"
-        return f"Candidature sans utilisateur associé - {self.offre.titre}"
+        return f"{self.candidate.user.first_name} {self.candidate.user.last_name} - {self.job_offer.title}"

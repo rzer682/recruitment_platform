@@ -6,11 +6,16 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password', 'role']
+        extra_kwargs = {'password': {'write_only': True}}
         
     def create(self, validated_data):
-        role = validated_data.get('role')
-        user = User.objects.create(**validated_data)
-        if role == 'candidat':
+        role = validated_data.get('role', None)
+        password = validated_data.pop('password', None)
+        user = User(**validated_data)
+        if password: 
+            user.set_password(password)
+        user.save()
+        if role == 'candidat': 
             Candidat.objects.create(user=user)
         elif role == 'recruteur':
             Recruteur.objects.create(user=user)
