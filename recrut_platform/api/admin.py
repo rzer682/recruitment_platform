@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Candidat, Recruteur, OffreEmploie, Candidature, Entreprise
+from .models import Candidate, Recruiter, JobOffer, Application, Company
 
 # Register your models here.
 
-admin.site.register(Candidat)
-admin.site.register(Recruteur)
-admin.site.register(OffreEmploie)
-admin.site.register(Candidature)
-admin.site.register(Entreprise)
+admin.site.register(Candidate)
+admin.site.register(Recruiter)
+admin.site.register(JobOffer)
+admin.site.register(Application)
+admin.site.register(Company)

@@ -23,9 +23,9 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="API de Recrutement",
+        title="recruitment API",
         default_version='v.0.1',
-        description="Documentation pour l'API-REST de la plateforme de recrutement",
+        description="API-Rest for the recruitment platform",
     ),
     public=True,
     permission_classes=[permissions.AllowAny],

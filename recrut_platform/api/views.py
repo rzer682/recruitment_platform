@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from .permissions import IsRecruteur
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Candidat, Recruteur, OffreEmploie, Entreprise, Candidature, User 
-from .serializers import CandidatSerializer, RecruteurSerializer, OffreEmploieSerializer, EntrepriseSerializer, CandidatureSerializer, UserSerializer
+from .models import Candidate, Recruiter, JobOffer, Company, Application, User 
+from .serializers import UserSerializer, CandidateSerializer, RecruiterSerializer, JobOfferSerializer, CompanySerializer, ApplicationSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -16,40 +16,39 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = []
     
-
-class CandidatViewSet(viewsets.ModelViewSet):
-    queryset = Candidat.objects.all()
-    serializer_class = CandidatSerializer
+class CandidateViewSet(viewsets.ModelViewSet):
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateSerializer
     permission_classes = [IsAuthenticated]
     
 
-class RecruteurViewSet(viewsets.ModelViewSet):
-    queryset = Recruteur.objects.all()
-    serializer_class = RecruteurSerializer
+class RecruiterViewSet(viewsets.ModelViewSet):
+    queryset = Recruiter.objects.all()
+    serializer_class = RecruiterSerializer
     permission_classes = [IsAuthenticated]
 
-class OffreEmploieViewSet(viewsets.ModelViewSet):
-    queryset = OffreEmploie.objects.all()
-    serializer_class = OffreEmploieSerializer
+class JobOfferViewSet(viewsets.ModelViewSet):
+    queryset = JobOffer.objects.all()
+    serializer_class = JobOfferSerializer
     permission_classes = [IsRecruteur, IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['titre', 'ville', 'pays', 'date_poste', 'salaire', 'recruteur__entreprise__nom']
+    filterset_fields = ['title', 'town', 'country', 'date_poste', 'salary', 'recruiter__company__name']
 
     def get_queryset(self):
         return self.queryset
     
     
-class EntrepriseViewSet(viewsets.ModelViewSet):
-    queryset = Entreprise.objects.all()
-    serializer_class = EntrepriseSerializer 
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all()
+    serializer_class = CompanySerializer 
     permission_classes = [IsRecruteur, IsAuthenticated]
 
     def get_queryset(self):
         return self.queryset
 
-class CandidatureViewSet(viewsets.ModelViewSet):
-    queryset = Candidature.objects.all()
-    serializer_class = CandidatureSerializer
+class ApplicationViewSet(viewsets.ModelViewSet):
+    queryset = Application.objects.all()
+    serializer_class = ApplicationSerializer
     permission_classes = [IsAuthenticated]
 
     def get_permissions(self):

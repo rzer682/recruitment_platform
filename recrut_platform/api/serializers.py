@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Candidat, Recruteur, OffreEmploie, Entreprise, Candidature, User 
+from .models import Candidate, Recruiter, JobOffer, Company, Application, User 
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,33 +15,33 @@ class UserSerializer(serializers.ModelSerializer):
         if password: 
             user.set_password(password)
         user.save()
-        if role == 'candidat': 
-            Candidat.objects.create(user=user)
-        elif role == 'recruteur':
-            Recruteur.objects.create(user=user)
+        if role == 'candidate': 
+            Candidate.objects.create(user=user)
+        elif role == 'recruiter':
+            Recruiter.objects.create(user=user)
         return user
-class CandidatSerializer(serializers.ModelSerializer):
+class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Candidat
+        model = Candidate
         fields = '__all__'
 
-class RecruteurSerializer(serializers.ModelSerializer):
+class RecruiterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Recruteur
+        model = Recruiter
         fields = '__all__'
 
 
-class OffreEmploieSerializer(serializers.ModelSerializer):
+class JobOfferSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OffreEmploie
+        model = JobOffer
         fields = '__all__'
 
-class EntrepriseSerializer(serializers.ModelSerializer):
+class CompanySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Entreprise
+        model = Company
         fields = '__all__'
 
-class CandidatureSerializer(serializers.ModelSerializer):
+class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Candidature
+        model = Application
         fields = '__all__'

@@ -6,79 +6,79 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     ROLES = (
-        ('recruteur', 'Recruteur'),
-        ('candidat', 'Candidat'),
+        ('recruiter', 'Recruiter'),
+        ('candidate', 'Candidate'),
     )
-    role = models.CharField(max_length=20, choices=ROLES, default='candidat')
+    role = models.CharField(max_length=20, choices=ROLES, default='candidate')
 
     def __str__(self):
         return self.username
 
     
 
-class Candidat(models.Model):
+class Candidate(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
-    telephone = models.CharField(max_length=15, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True)
     experience = models.TextField(blank=True)
-    competences = models.TextField(blank=True, null=True)
+    skills = models.TextField(blank=True, null=True)
     cv = models.FileField(upload_to='cv/', blank=True, null=True)
-    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
+    cover_lettre = models.FileField(upload_to='cover_lettre/', blank=True, null=True)
     linkedin = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}"
     
 
-class Entreprise(models.Model):
-    nom = models.CharField(max_length=150)
-    adresse = models.CharField(max_length=200)
-    ville = models.CharField(max_length=100)
-    pays = models.CharField(max_length=100)
+class Company(models.Model):
+    name = models.CharField(max_length=150)
+    addresse = models.CharField(max_length=200)
+    town = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
     description = models.TextField()
     website = models.URLField()
 
     def __str__(self):
-        return self.nom
+        return self.name
     
-class Recruteur(models.Model):
+class Recruiter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
-    entreprise = models.ForeignKey('Entreprise', on_delete=models.CASCADE)
-    poste = models.CharField(max_length=100)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    position = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.user.username} - {self.entreprise.nom}"
+        return f"{self.user.username} - {self.company.name}"
     
 
-class OffreEmploie(models.Model): 
-    recruteur = models.ForeignKey(Recruteur, on_delete=models.CASCADE)
-    titre = models.CharField(max_length=200)
+class JobOffer(models.Model): 
+    recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
     description = models.TextField()
     date_poste = models.DateField()
-    salaire = models.DecimalField(max_digits=10, decimal_places=2)
-    adresse = models.CharField(max_length=200)
-    ville = models.CharField(max_length=100)
-    pays = models.CharField(max_length=100)
+    salary = models.DecimalField(max_digits=10, decimal_places=2)
+    addresse = models.CharField(max_length=200)
+    town = models.CharField(max_length=100)
+    country = models.CharField(max_length=100)
     description = models.TextField()
 
     def __str__(self):
-        return self.titre
+        return self.title
     
 
-class Candidature(models.Model):
-    offre = models.ForeignKey('OffreEmploie', on_delete=models.CASCADE, related_name='candidatures')
-    candidat = models.ForeignKey(Candidat, on_delete=models.CASCADE, related_query_name='candidatures')
-    date_candidature = models.DateTimeField(auto_now_add=True)
+class Application(models.Model):
+    job = models.ForeignKey('JobOffer', on_delete=models.CASCADE, related_name='applications')
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_query_name='applications')
+    application_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
         choices=[
-            ('en_attente', 'en_attente'),
-            ('vue', 'vue'),
-            ('accepter', 'accepter'),
-            ('rejeter', 'rejeter'),
+            ('pending', 'pending'),
+            ('seen', 'seen'),
+            ('accepted', 'accepted'),
+            ('rejected', 'rejected'),
         ],
-        default='en_attente'
+        default='pending'
     )
-    lettre_motivation = models.FileField(upload_to='lettre_motivation/', blank=True, null=True)
+    cover_letter = models.FileField(upload_to='cover_letters/', blank=True, null=True)
     
     def __str__(self):
-        return f"{self.candidate.user.first_name} {self.candidate.user.last_name} - {self.job_offer.title}"
+        return f"{self.candidate.user.first_name} {self.candidate.user.last_name} - {self.job.title}"
