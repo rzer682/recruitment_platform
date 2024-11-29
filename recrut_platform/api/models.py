@@ -17,7 +17,7 @@ class User(AbstractUser):
     
 
 class Candidate(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
+    user = models.OneToOneField('api.User', on_delete=models.CASCADE, null=False, default=1)
     phone_number = models.CharField(max_length=15, blank=True)
     experience = models.TextField(blank=True)
     skills = models.TextField(blank=True, null=True)
@@ -41,8 +41,8 @@ class Company(models.Model):
         return self.name
     
 class Recruiter(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=False, default=1)
-    company = models.ForeignKey('Company', on_delete=models.CASCADE)
+    user = models.OneToOneField('api.User', on_delete=models.CASCADE, null=False, default=1)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, null=True, blank=True)
     position = models.CharField(max_length=100)
 
     def __str__(self):
